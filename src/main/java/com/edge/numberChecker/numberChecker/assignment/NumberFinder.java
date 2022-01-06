@@ -2,7 +2,6 @@ package com.edge.numberChecker.numberChecker.assignment;
 
 import java.util.List;
 
-//Copy of original File. Not to be modified
 public interface NumberFinder {
 
     /**
