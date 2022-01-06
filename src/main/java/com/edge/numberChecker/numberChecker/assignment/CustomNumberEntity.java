@@ -5,6 +5,7 @@ package com.edge.numberChecker.numberChecker.sampleFiles;
  * JSON example:
  * {"number":"1"}
  */
+//Copy of original File. Not to be modified
 public final class CustomNumberEntity {
 
     private String number;

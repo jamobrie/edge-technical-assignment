@@ -2,6 +2,7 @@ package com.edge.numberChecker.numberChecker.sampleFiles;
 
 import java.util.Random;
 
+//Copy of original File. Not to be modified
 public final class FastestComparator {
 
     /**

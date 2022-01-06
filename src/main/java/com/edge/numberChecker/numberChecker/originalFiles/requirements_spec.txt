@@ -1,3 +1,5 @@
+-- Copy of original File. Not to be modified
+
 Technical Test
 
 New specs and modified classes
@@ -17,8 +19,6 @@ Constraints:
 
 - You MUST include Junit tests for running your code.
 - Write your code using java 7 or 8
-
-
 
 
 Example:
