@@ -1,4 +1,4 @@
-package com.edge.numberChecker.numberChecker.sampleFiles;
+package com.edge.numberChecker.numberChecker.originalFiles;
 
 /**
  * Entity to hold my custom number from a JSON model

@@ -1,4 +1,4 @@
-package com.edge.numberChecker.numberChecker.sampleFiles;
+package com.edge.numberChecker.numberChecker.assignment;
 
 import java.util.List;
 
