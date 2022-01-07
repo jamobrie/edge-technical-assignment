@@ -4,36 +4,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class NumberFinderImpl implements NumberFinder {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
-    public void checkThatNumberExistsInFile() {
-        List<CustomNumberEntity> allNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
+    public String checkThatNumberExistsInFile() {
+        List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
 
-        Scanner in = new Scanner(System.in);
-        int inputtedNumber = in.nextInt();
+        int yourNumberToCheck = 7;
 
         log.info("Enter a number and we will check if it is present within the list");
 
-        contains(inputtedNumber, allNumbers);
+        String result = contains(yourNumberToCheck, allExistingNumbers) ? " It does exist in the list" : " It does not exist in the list";
 
-    }
-
-    @Override
-    public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) {
-        //Emphasis placed on speed of process
-        FastestComparator fastestComparator = new FastestComparator();
-
-        log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
-        customNumberEntityList.forEach(customer -> {
-            fastestComparator.compare(valueToFind, customer);
-        });
-
-        //Perform calculation correctly before returning
-        return false;
+        return "Based on the number you provided of: " + yourNumberToCheck + result;
     }
 
     @Override
@@ -51,6 +36,20 @@ public class NumberFinderImpl implements NumberFinder {
         //5. Return the response
 
         return null;
+    }
+
+    @Override
+    public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) {
+        //Emphasis placed on speed of process
+        FastestComparator fastestComparator = new FastestComparator();
+
+        log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
+        customNumberEntityList.forEach(customer -> {
+            fastestComparator.compare(valueToFind, customer);
+        });
+
+        //Perform calculation correctly before returning
+        return false;
     }
 
 }
