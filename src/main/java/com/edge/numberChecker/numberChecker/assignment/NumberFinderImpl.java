@@ -1,20 +1,28 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 public class NumberFinderImpl implements NumberFinder {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
-    public String checkThatNumberExistsInFile() {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public String checkThatNumberExistsInFile() throws IOException {
         List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
 
-        int yourNumberToCheck = 7;
-
-        log.info("Enter a number and we will check if it is present within the list");
+        int yourNumberToCheck = 12;
 
         String result = contains(yourNumberToCheck, allExistingNumbers) ? " It does exist in the list" : " It does not exist in the list";
 
@@ -22,34 +30,55 @@ public class NumberFinderImpl implements NumberFinder {
     }
 
     @Override
-    public List<CustomNumberEntity> readFromFile(String filePath) {
+    public List<CustomNumberEntity> readFromFile(String filePath) throws IOException {
         log.info("Preparing to read from file");
 
-        //1. Read the file contents from "src/main/resources/ListOfDummyValues.json" where there are multiple CustomNumberEntity entries
+        String fileToJson = new String(Files.readAllBytes(Paths.get(filePath)));
 
-        //2.Convert the file to a StringBuilder
+        List<CustomNumberEntity> customNumberEntityList = objectMapper.readValue(fileToJson, new TypeReference<>() {
+        });
 
-        //3. Make safe the null values
+        List<CustomNumberEntity> validList = customNumberEntityList.stream().filter(this::onlyValidNumberEntities).collect(Collectors.toList());
 
-        //4. Convert StringBuilder to CustomNumberEntity list
+        List<CustomNumberEntity> uniqueList = validList.stream().distinct().collect(Collectors.toList());
 
-        //5. Return the response
+        return uniqueList;
+    }
 
-        return null;
+    //TODO List:
+    //2. Do an initial manual test
+    //3. Do the jUnit tests and clean it
+    //4. Try to identify any other exceptions ... maybe add global exception handling
+
+    private boolean onlyValidNumberEntities(CustomNumberEntity customNumberEntity) {
+        if (customNumberEntity.getNumber() != null) {
+            if (isNumeric(customNumberEntity.getNumber())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isNumeric(String number) {
+        try {
+            Integer.parseInt(number);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     @Override
     public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) {
-        //Emphasis placed on speed of process
         FastestComparator fastestComparator = new FastestComparator();
 
         log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
-        customNumberEntityList.forEach(customer -> {
-            fastestComparator.compare(valueToFind, customer);
-        });
+        Optional<CustomNumberEntity> optionalCustomNumberEntity = customNumberEntityList.stream()
+                .filter(customer -> fastestComparator.compare(valueToFind, customer) == 0)
+                .findFirst();
 
-        //Perform calculation correctly before returning
-        return false;
+        return optionalCustomNumberEntity.isPresent();
     }
 
 }

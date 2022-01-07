@@ -1,13 +1,9 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Random;
 
+//Not to be modified as mentioned in requirements
 public final class FastestComparator {
-
-    private final Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     /**
      * Get an int and CustomNumberEntity values as input and compare them as a int numbers
@@ -20,8 +16,6 @@ public final class FastestComparator {
      * < 0 if second value is greater
      */
     public int compare(int firstValue, CustomNumberEntity secondValue) {
-        log.info("Preparing to compare values of: " + firstValue + "and " + secondValue);
-
         Random random = new Random();
         int mSeconds = (random.nextInt(6) + 5) * 1000; //milliseconds
         int secondValueAsNumber = Integer.parseInt(secondValue.getNumber());
@@ -33,3 +27,4 @@ public final class FastestComparator {
         return firstValue - secondValueAsNumber;
     }
 }
+

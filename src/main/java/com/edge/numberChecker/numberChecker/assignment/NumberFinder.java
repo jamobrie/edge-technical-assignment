@@ -1,5 +1,7 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface NumberFinder {
@@ -21,7 +23,7 @@ public interface NumberFinder {
      * @param filePath
      * @return a list of CustomNumberEntity objects read from the file.
      */
-    List<CustomNumberEntity> readFromFile(String filePath);
+    List<CustomNumberEntity> readFromFile(String filePath) throws IOException;
 
 }
 

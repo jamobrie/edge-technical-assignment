@@ -2,6 +2,8 @@ package com.edge.numberChecker.numberChecker.assignment;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class NumberFinderImplTest {
 
     @Test
-    void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() {
+    void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         numberFinder.checkThatNumberExistsInFile();
 
@@ -18,7 +20,7 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() {
+    void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         numberFinder.checkThatNumberExistsInFile();
 
@@ -64,7 +66,7 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenValid_thenListOfCustomerEntityShouldBeReturned() {
+    void readFromFile_whenValid_thenListOfCustomerEntityShouldBeReturned() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
 
@@ -73,7 +75,7 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenInvalidFilePathIsProvided_thenThrowException() {
+    void readFromFile_whenInvalidFilePathIsProvided_thenThrowException() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfIncorrectFilepath123abcDummyValues.json");
 
@@ -82,7 +84,7 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenFileContainsNulls_thenAvoidNPE() {
+    void readFromFile_whenFileContainsNulls_thenAvoidNPE() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
 
@@ -91,7 +93,7 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenUnexpectedText_thenThrowException() {
+    void readFromFile_whenUnexpectedText_thenThrowException() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
 
