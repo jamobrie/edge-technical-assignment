@@ -20,8 +20,7 @@ public final class FastestComparator {
         int mSeconds = (random.nextInt(6) + 5) * 1000; //milliseconds
         int secondValueAsNumber = Integer.parseInt(secondValue.getNumber());
         try {
-            Thread.sleep(100);
-            //Jimmy undo this after test
+            Thread.sleep(mSeconds);
         } catch (InterruptedException e) {
             //error while sleeping. Do nothing.
         }

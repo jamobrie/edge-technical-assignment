@@ -36,29 +36,20 @@ public class NumberFinderImpl implements NumberFinder {
         List<CustomNumberEntity> customNumberEntityList = objectMapper.readValue(fileToJson, new TypeReference<>() {
         });
 
-        List<CustomNumberEntity> validList = customNumberEntityList.stream().filter(this::onlyValidNumberEntities).collect(Collectors.toList());
+        List<CustomNumberEntity> validList = customNumberEntityList.stream().filter(this::onlyValidNumbersToBeCollected).collect(Collectors.toList());
 
-        List<CustomNumberEntity> uniqueList = validList.stream().distinct().collect(Collectors.toList());
-
-        return uniqueList;
+        return validList.stream().distinct().collect(Collectors.toList());
     }
 
-    //TODO List:
-    //2. Do an initial manual test
-    //3. Do the jUnit tests and clean it
-    //4. Try to identify any other exceptions ... maybe add global exception handling
-
-    private boolean onlyValidNumberEntities(CustomNumberEntity customNumberEntity) {
+    private boolean onlyValidNumbersToBeCollected(CustomNumberEntity customNumberEntity) {
         if (customNumberEntity.getNumber() != null) {
-            if (isNumeric(customNumberEntity.getNumber())) {
-                return true;
-            }
+            return canBeParsedAsInteger(customNumberEntity.getNumber());
         }
 
         return false;
     }
 
-    private boolean isNumeric(String number) {
+    private boolean canBeParsedAsInteger(String number) {
         try {
             Integer.parseInt(number);
             return true;
