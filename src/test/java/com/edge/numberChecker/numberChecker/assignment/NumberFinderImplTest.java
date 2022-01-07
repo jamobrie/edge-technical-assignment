@@ -1,12 +1,14 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NumberFinderImplTest {
 
@@ -66,39 +68,64 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenValid_thenListOfCustomerEntityShouldBeReturned() throws IOException {
+    void readFromFile_whenValid_thenListOfCustomerEntityShouldBeReturned_AndDuplicatesAreNotTakenIntoAccount() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
+        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/test/resources/ListOfDummyValues.json");
 
-        //assert list size, not null
-        fail();
+        assertEquals(6, actualList.size());
+        assertEquals("67", actualList.get(0).getNumber());
+        assertEquals("45", actualList.get(1).getNumber());
+        assertEquals("-3", actualList.get(2).getNumber());
+        assertEquals("12", actualList.get(3).getNumber());
+        assertEquals("100", actualList.get(4).getNumber());
+        assertEquals("3", actualList.get(5).getNumber());
     }
 
     @Test
     void readFromFile_whenInvalidFilePathIsProvided_thenThrowException() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfIncorrectFilepath123abcDummyValues.json");
 
-        //assert global error handling is caught
-        fail();
+        NoSuchFileException noSuchFileException = assertThrows(NoSuchFileException.class, () ->
+                numberFinder.readFromFile("src/test/resources/ListOfIncorrectFilepath123abcDummyValues.json"));
+
+        //TODO Add global exception handling for more accurate error message
+        assertEquals(null, noSuchFileException.getCause());
     }
 
     @Test
-    void readFromFile_whenFileContainsNulls_thenAvoidNPE() throws IOException {
+    void readFromFile_whenFileContainsNullsAndInvalidValues_thenIgnoreValuesInList() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
+        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/test/resources/ListOfNullAndInvalidNumberValues.json");
 
-        //assert that the presence of nulls does not affect the returned list adversely
-        fail();
+        assertEquals(0, actualList.size());
     }
 
     @Test
     void readFromFile_whenUnexpectedText_thenThrowException() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        List<CustomNumberEntity> actualList = numberFinder.readFromFile("src/main/resources/ListOfDummyValues.json");
 
-        //assert exception is thrown when file contains bizarre format or patterns
-        fail();
+        UnrecognizedPropertyException unrecognizedPropertyException = assertThrows(UnrecognizedPropertyException.class, () ->
+                numberFinder.readFromFile("src/test/resources/ListOfDummyValuesWithInvalidStructure.json"));
+
+        //TODO Add global exception handling for more accurate error message
+        assertThat(unrecognizedPropertyException.getMessage().contains(
+                "Unrecognized field \"numberTest\" (class com.edge.numberChecker.numberChecker.assignment.CustomNumberEntity), not marked as ignorable (one known property: \"number\"])\n" +
+                " at [Source: (String)\"[\n" +
+                "  {\n" +
+                "    \"number\": \"67\"\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"numberTest\": \"45\"\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"number\": null\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"numberAbc\": \"45\"\n" +
+                "  }\n" +
+                "]\"; line: 6, column: 20] (through reference chain: java.util.ArrayList[1]->com.edge.numberChecker.numberChecker.assignment.CustomNumberEntity[\"numberTest\"])"
+        ));
+
     }
 
     public List<CustomNumberEntity> customNumberTestData() {
