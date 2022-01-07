@@ -19,14 +19,12 @@ public class NumberFinderImpl implements NumberFinder {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public String checkThatNumberExistsInFile() throws IOException {
+    public String checkThatNumberExistsInFile(int yourNumberToCheck) throws IOException {
         List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
 
-        int yourNumberToCheck = 12;
+        String result = contains(yourNumberToCheck, allExistingNumbers) ? " ... it does exist in the list. Success!" : " ... it does not exist in the list. Failure!";
 
-        String result = contains(yourNumberToCheck, allExistingNumbers) ? " It does exist in the list" : " It does not exist in the list";
-
-        return "Based on the number you provided of: " + yourNumberToCheck + result;
+        return "Based on the number you provided of " + yourNumberToCheck + result;
     }
 
     @Override

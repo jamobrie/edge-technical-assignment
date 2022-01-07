@@ -13,7 +13,7 @@ public class NumberCheckerApplication {
         SpringApplication.run(NumberCheckerApplication.class, args);
 
         NumberFinderImpl numberChecker = new NumberFinderImpl();
-        numberChecker.checkThatNumberExistsInFile();
+        numberChecker.checkThatNumberExistsInFile(12);
 
     }
 

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NumberFinderImplTest {
@@ -15,56 +14,54 @@ class NumberFinderImplTest {
     @Test
     void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        numberFinder.checkThatNumberExistsInFile();
+        String numberExistsMessage = numberFinder.checkThatNumberExistsInFile(12);
 
-        //assert String exists
-        fail();
+        assertEquals("Based on the number you provided of 12 ... it does exist in the list. Success!", numberExistsMessage);
     }
 
     @Test
     void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        numberFinder.checkThatNumberExistsInFile();
+        String numberDoesNotExistMessage = numberFinder.checkThatNumberExistsInFile(62);
 
-        //assert String not exists
+        assertEquals("Based on the number you provided of 62 ... it does not exist in the list. Failure!", numberDoesNotExistMessage);
 
-        fail();
     }
 
     @Test
-    void contains_whenNumberIsPresent_then() {
+    void contains_whenNumberIsPresent_thenAssertTrue() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> customNumberEntityList = customNumberTestData();
 
         int valueThatShouldExistInList = 100;
 
-        numberFinder.contains(valueThatShouldExistInList, customNumberEntityList);
+        boolean doesValueExist = numberFinder.contains(valueThatShouldExistInList, customNumberEntityList);
 
-        fail();
+        assertTrue(doesValueExist);
     }
 
     @Test
-    void contains_whenNumberIsPresentAndMultipleDuplicatesExist_then() {
+    void contains_whenNumberIsPresentAndMultipleDuplicatesExist_thenAssertTrue() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> customNumberEntityList = customNumberTestData();
 
         int valueThatShouldExistInList = 12;
 
-        numberFinder.contains(valueThatShouldExistInList, customNumberEntityList);
+        boolean doesValueExist = numberFinder.contains(valueThatShouldExistInList, customNumberEntityList);
 
-        fail();
+        assertTrue(doesValueExist);
     }
 
     @Test
-    void contains_whenNumberIsNotPresent_then() {
+    void contains_whenNumberIsNotPresent_thenAssertFalse() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         List<CustomNumberEntity> customNumberEntityList = customNumberTestData();
 
         int valueThatShouldNotExistInList = 77;
 
-        numberFinder.contains(valueThatShouldNotExistInList, customNumberEntityList);
+        boolean doesValueExist = numberFinder.contains(valueThatShouldNotExistInList, customNumberEntityList);
 
-        fail();
+        assertFalse(doesValueExist);
     }
 
     @Test
@@ -89,7 +86,7 @@ class NumberFinderImplTest {
                 numberFinder.readFromFile("src/test/resources/ListOfIncorrectFilepath123abcDummyValues.json"));
 
         //TODO Add global exception handling for more accurate error message
-        assertEquals(null, noSuchFileException.getCause());
+        assertNull(noSuchFileException.getCause());
     }
 
     @Test
@@ -101,36 +98,20 @@ class NumberFinderImplTest {
     }
 
     @Test
-    void readFromFile_whenUnexpectedText_thenThrowException() throws IOException {
+    void readFromFile_whenUnexpectedText_thenThrowException() {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
 
         UnrecognizedPropertyException unrecognizedPropertyException = assertThrows(UnrecognizedPropertyException.class, () ->
                 numberFinder.readFromFile("src/test/resources/ListOfDummyValuesWithInvalidStructure.json"));
 
         //TODO Add global exception handling for more accurate error message
-        assertThat(unrecognizedPropertyException.getMessage().contains(
-                "Unrecognized field \"numberTest\" (class com.edge.numberChecker.numberChecker.assignment.CustomNumberEntity), not marked as ignorable (one known property: \"number\"])\n" +
-                " at [Source: (String)\"[\n" +
-                "  {\n" +
-                "    \"number\": \"67\"\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"numberTest\": \"45\"\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"number\": null\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"numberAbc\": \"45\"\n" +
-                "  }\n" +
-                "]\"; line: 6, column: 20] (through reference chain: java.util.ArrayList[1]->com.edge.numberChecker.numberChecker.assignment.CustomNumberEntity[\"numberTest\"])"
-        ));
+        assertTrue(unrecognizedPropertyException.getMessage().contains("Unrecognized field \"numberTest\" (class com.edge.numberChecker.numberChecker.assignment.CustomNumberEntity)"));
 
     }
 
-    public List<CustomNumberEntity> customNumberTestData() {
-        //TODO Read from test file to produce java list for testing
-        return null;
+    public List<CustomNumberEntity> customNumberTestData() throws IOException {
+        NumberFinderImpl numberFinder = new NumberFinderImpl();
+        return numberFinder.readFromFile("src/test/resources/ListOfDummyValues.json");
     }
 
 
