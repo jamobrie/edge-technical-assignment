@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class NumberCheckerApplication {
@@ -13,7 +14,22 @@ public class NumberCheckerApplication {
         SpringApplication.run(NumberCheckerApplication.class, args);
 
         NumberFinderImpl numberChecker = new NumberFinderImpl();
-        numberChecker.checkThatNumberExistsInFile(12);
+
+        System.out.println("Enter a number to check!");
+        Scanner scanner = new Scanner(System.in);
+
+        boolean keepApplicationAlive = true;
+        while (keepApplicationAlive) {
+            int enteredNumber = scanner.nextInt();
+            if (enteredNumber != 0) {
+                numberChecker.checkThatNumberExistsInFile(enteredNumber);
+            } else {
+                scanner.close();
+                keepApplicationAlive = false;
+            }
+        }
+
+        System.exit(0);
 
     }
 

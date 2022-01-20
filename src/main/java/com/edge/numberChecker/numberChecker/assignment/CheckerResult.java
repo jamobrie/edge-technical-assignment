@@ -30,4 +30,13 @@ public class CheckerResult {
         return timeRequiredToCheckInMilliseconds;
     }
 
+    @Override
+    public String toString() {
+        return "CheckerResult{" +
+                "yourNumberToCheck=" + yourNumberToCheck +
+                ", resultOfChecking='" + resultOfChecking + '\'' +
+                ", timeRequiredToCheckInMilliseconds=" + timeRequiredToCheckInMilliseconds +
+                '}';
+    }
+
 }
