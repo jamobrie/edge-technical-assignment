@@ -14,18 +14,23 @@ class NumberFinderImplTest {
     @Test
     void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        String numberExistsMessage = numberFinder.checkThatNumberExistsInFile(12);
+        CheckerResult checkerResult = numberFinder.checkThatNumberExistsInFile(12);
 
-        assertEquals("Based on the number you provided of 12 ... it does exist in the list. Success!", numberExistsMessage);
+        assertEquals(12, checkerResult.getYourNumberToCheck());
+        assertEquals("yes it was found!", checkerResult.getResultOfChecking());
+        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() > 1);
+        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() < 5000);
     }
 
     @Test
     void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        String numberDoesNotExistMessage = numberFinder.checkThatNumberExistsInFile(62);
+        CheckerResult checkerResult = numberFinder.checkThatNumberExistsInFile(62);
 
-        assertEquals("Based on the number you provided of 62 ... it does not exist in the list. Failure!", numberDoesNotExistMessage);
-
+        assertEquals(62, checkerResult.getYourNumberToCheck());
+        assertEquals("no it was not found!", checkerResult.getResultOfChecking());
+        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() > 1);
+        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() < 5000);
     }
 
     @Test

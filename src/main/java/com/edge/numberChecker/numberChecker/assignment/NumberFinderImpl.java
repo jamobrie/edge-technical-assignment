@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,12 +20,18 @@ public class NumberFinderImpl implements NumberFinder {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public String checkThatNumberExistsInFile(int yourNumberToCheck) throws IOException {
+    public CheckerResult checkThatNumberExistsInFile(int yourNumberToCheck) throws IOException {
+        Instant startTime = Instant.now();
+
         List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
+        boolean wasNumberFound = contains(yourNumberToCheck, allExistingNumbers);
+        String resultOfChecking = wasNumberFound ? "yes it was found!" : "no it was not found!";
 
-        String result = contains(yourNumberToCheck, allExistingNumbers) ? " ... it does exist in the list. Success!" : " ... it does not exist in the list. Failure!";
+        CheckerResult checkerResult = new CheckerResult(yourNumberToCheck, resultOfChecking, startTime);
 
-        return "Based on the number you provided of " + yourNumberToCheck + result;
+        log.info("Time taken to determine if number exists in milliseconds: " + checkerResult.getTimeRequiredToCheckInMilliseconds());
+
+        return checkerResult;
     }
 
     @Override
