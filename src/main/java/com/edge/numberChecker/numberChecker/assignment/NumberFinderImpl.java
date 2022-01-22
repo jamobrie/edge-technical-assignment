@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +18,7 @@ public class NumberFinderImpl implements NumberFinder {
     private final Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+//    private final AtomicInteger doesNumberExistCounter = new AtomicInteger();
 
     public CheckerResult checkThatNumberExistsInFile(int yourNumberToCheck) throws IOException {
         Instant startTime = Instant.now();
@@ -29,7 +29,7 @@ public class NumberFinderImpl implements NumberFinder {
 
         CheckerResult checkerResult = new CheckerResult(yourNumberToCheck, resultOfChecking, startTime);
 
-        log.info("Time taken to determine if number exists in milliseconds: " + checkerResult.getTimeRequiredToCheckInMilliseconds());
+        log.info(checkerResult.toString());
 
         return checkerResult;
     }
@@ -67,14 +67,29 @@ public class NumberFinderImpl implements NumberFinder {
 
     @Override
     public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) {
+        log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
+        //parallelStream
         FastestComparator fastestComparator = new FastestComparator();
 
-        log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
-        Optional<CustomNumberEntity> optionalCustomNumberEntity = customNumberEntityList.stream()
-                .filter(customer -> fastestComparator.compare(valueToFind, customer) == 0)
-                .findFirst();
+        boolean isNumberFound = false;
+        while (!isNumberFound) {
 
-        return optionalCustomNumberEntity.isPresent();
+            for (CustomNumberEntity ce : customNumberEntityList) {
+//                Task taskRunner = new Task(valueToFind, ce);
+//                taskRunner.start();
+
+                fastestComparator.compare(valueToFind, ce);
+                //taskRunner.getDoesNumberExistCounter().get() > 0
+                if (fastestComparator.compare(valueToFind, ce) == 0) {
+                    System.out.println("sucessess, number found!!!!!!");
+                    isNumberFound = true;
+                    break;
+                }
+
+                System.out.println(Thread.currentThread().getName() + " " + valueToFind + " " + ce.getNumber());
+            }
+            break;
+        }
+        return isNumberFound;
     }
-
 }
