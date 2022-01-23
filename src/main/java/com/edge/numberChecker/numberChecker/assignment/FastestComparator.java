@@ -1,10 +1,16 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
+import com.edge.numberChecker.numberChecker.NumberCheckerApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Random;
 import java.util.concurrent.Callable;
 
 //Not to be modified as mentioned in requirements
 public final class FastestComparator implements Callable<Integer> {
+
+    private static final Logger log = LoggerFactory.getLogger(FastestComparator.class);
 
     private final int valueToFind;
     private final CustomNumberEntity customNumberEntity;
@@ -27,7 +33,7 @@ public final class FastestComparator implements Callable<Integer> {
     public int compare(int firstValue, CustomNumberEntity secondValue) {
         Random random = new Random();
         int mSeconds = (random.nextInt(6) + 5) * 1000; //milliseconds
-        System.out.println(Thread.currentThread().getName() + " is sleeping for: " + mSeconds);
+        log.info(Thread.currentThread().getName() + " is sleeping for: " + mSeconds);
         int secondValueAsNumber = Integer.parseInt(secondValue.getNumber());
         try {
             Thread.sleep(mSeconds);

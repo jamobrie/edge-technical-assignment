@@ -3,13 +3,13 @@ package com.edge.numberChecker.numberChecker.assignment;
 import java.time.Duration;
 import java.time.Instant;
 
-public class CheckerResult {
+public class FindNumberResult {
 
     int yourNumberToCheck;
     String resultOfChecking;
     long timeRequiredToCheckInMilliseconds;
 
-    public CheckerResult(int yourNumberToCheck, String resultOfChecking, Instant startTime
+    public FindNumberResult(int yourNumberToCheck, String resultOfChecking, Instant startTime
     ) {
         Instant endTime = Instant.now();
 
@@ -32,7 +32,7 @@ public class CheckerResult {
 
     @Override
     public String toString() {
-        return "CheckerResult{" +
+        return "FindNumberResult{" +
                 "yourNumberToCheck=" + yourNumberToCheck +
                 ", resultOfChecking='" + resultOfChecking + '\'' +
                 ", timeRequiredToCheckInMilliseconds=" + timeRequiredToCheckInMilliseconds +

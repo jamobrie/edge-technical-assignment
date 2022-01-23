@@ -22,20 +22,21 @@ public class NumberFinderImpl implements NumberFinder {
     private final Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-//    private final AtomicInteger doesNumberExistCounter = new AtomicInteger();
 
-    public CheckerResult checkThatNumberExistsInFile(int yourNumberToCheck) {
+    public FindNumberResult checkThatNumberExistsInFile(int yourNumberToCheck) {
         Instant startTime = Instant.now();
 
         List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
+
         boolean wasNumberFound = contains(yourNumberToCheck, allExistingNumbers);
+
         String resultOfChecking = wasNumberFound ? "yes it was found!" : "no it was not found!";
 
-        CheckerResult checkerResult = new CheckerResult(yourNumberToCheck, resultOfChecking, startTime);
+        FindNumberResult findNumberResult = new FindNumberResult(yourNumberToCheck, resultOfChecking, startTime);
 
-        log.info(checkerResult.toString());
+        log.info(findNumberResult.toString());
 
-        return checkerResult;
+        return findNumberResult;
     }
 
     @Override
@@ -103,23 +104,21 @@ public class NumberFinderImpl implements NumberFinder {
             if (pool.isTerminated()) {
                 future = service.poll();
                 if (future == null) {
-                    System.out.println("------------Jimmy ----- Some values are not getting polled here! --- Linked to short sleep time!");
-                    System.out.println("Number does not match anywhere!");
+                    log.info("Number cannot be found in file!");
                     break;
                 }
             } else {
                 future = service.take();
             }
+            log.info("The result for this instance of FastestComparator.compare(): " + future.get());
             if (future.get().equals(0)) {
-                System.out.println("Jimmy14 " + Thread.currentThread().getName());
-                System.out.println("The number has been found by thread: " + Thread.currentThread().getName());
+                log.info("The number has been found by thread: " + Thread.currentThread().getName());
                 pool.shutdown();
                 wasFound = true;
                 return wasFound;
             }
         }
 
-        System.out.println("Jimmy5 " + Thread.currentThread().getName());
         return wasFound;
     }
 

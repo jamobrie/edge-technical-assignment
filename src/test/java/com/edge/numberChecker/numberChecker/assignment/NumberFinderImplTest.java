@@ -14,23 +14,23 @@ class NumberFinderImplTest {
     @Test
     void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        CheckerResult checkerResult = numberFinder.checkThatNumberExistsInFile(12);
+        FindNumberResult findNumberResult = numberFinder.checkThatNumberExistsInFile(12);
 
-        assertEquals(12, checkerResult.getYourNumberToCheck());
-        assertEquals("yes it was found!", checkerResult.getResultOfChecking());
-        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() > 1);
-        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() < 5000);
+        assertEquals(12, findNumberResult.getYourNumberToCheck());
+        assertEquals("yes it was found!", findNumberResult.getResultOfChecking());
+        assertTrue(findNumberResult.getTimeRequiredToCheckInMilliseconds() > 1);
+        assertTrue(findNumberResult.getTimeRequiredToCheckInMilliseconds() < 5000);
     }
 
     @Test
     void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
-        CheckerResult checkerResult = numberFinder.checkThatNumberExistsInFile(62);
+        FindNumberResult findNumberResult = numberFinder.checkThatNumberExistsInFile(62);
 
-        assertEquals(62, checkerResult.getYourNumberToCheck());
-        assertEquals("no it was not found!", checkerResult.getResultOfChecking());
-        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() > 1);
-        assertTrue(checkerResult.getTimeRequiredToCheckInMilliseconds() < 5000);
+        assertEquals(62, findNumberResult.getYourNumberToCheck());
+        assertEquals("no it was not found!", findNumberResult.getResultOfChecking());
+        assertTrue(findNumberResult.getTimeRequiredToCheckInMilliseconds() > 1);
+        assertTrue(findNumberResult.getTimeRequiredToCheckInMilliseconds() < 5000);
     }
 
     @Test
