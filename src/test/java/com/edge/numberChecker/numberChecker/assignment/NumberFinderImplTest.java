@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NumberFinderImplTest {
 
-    @RepeatedTest(value = 50)
+    @RepeatedTest(value = 30)
     void checkThatNumberExistsInFile_whenNumberExists_thenStringShouldConfirmItDoesExist() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         FindNumberResult findNumberResult = numberFinder.checkThatNumberExistsInFile(12);
@@ -29,7 +29,7 @@ class NumberFinderImplTest {
         assertTrue(findNumberResult.getTimeRequiredToCheckInMilliseconds() < 10500);
     }
 
-    @RepeatedTest(value = 50)
+    @RepeatedTest(value = 30)
     void checkThatNumberExistsInFile_whenNumberDoesNotExist_thenStringShouldConfirmItDoesNot() throws IOException {
         NumberFinderImpl numberFinder = new NumberFinderImpl();
         FindNumberResult findNumberResult = numberFinder.checkThatNumberExistsInFile(62);
