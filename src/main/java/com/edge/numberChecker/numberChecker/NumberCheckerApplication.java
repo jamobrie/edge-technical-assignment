@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -13,7 +14,7 @@ public class NumberCheckerApplication {
 
     private static final Logger log = LoggerFactory.getLogger(NumberCheckerApplication.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringApplication.run(NumberCheckerApplication.class, args);
 
         NumberFinderImpl numberChecker = new NumberFinderImpl();

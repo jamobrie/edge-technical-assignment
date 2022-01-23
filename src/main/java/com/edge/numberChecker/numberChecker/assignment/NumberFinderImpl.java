@@ -1,9 +1,7 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,12 +21,18 @@ public class NumberFinderImpl implements NumberFinder {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public FindNumberResult checkThatNumberExistsInFile(int yourNumberToCheck) {
+    public FindNumberResult checkThatNumberExistsInFile(int yourNumberToCheck) throws IOException {
         Instant startTime = Instant.now();
 
         List<CustomNumberEntity> allExistingNumbers = readFromFile("src/main/resources/ListOfDummyValues.json");
 
-        boolean wasNumberFound = contains(yourNumberToCheck, allExistingNumbers);
+        boolean wasNumberFound = false;
+        try {
+            wasNumberFound = contains(yourNumberToCheck, allExistingNumbers);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            log.error("Error occurred during Future execution whereby the polled Callables failed to get processed");
+        }
 
         String resultOfChecking = wasNumberFound ? "yes it was found!" : "no it was not found!";
 
@@ -40,23 +44,13 @@ public class NumberFinderImpl implements NumberFinder {
     }
 
     @Override
-    public List<CustomNumberEntity> readFromFile(String filePath) {
+    public List<CustomNumberEntity> readFromFile(String filePath) throws IOException {
         log.info("Preparing to read from file");
 
-        String fileToJson = null;
-        try {
-            fileToJson = new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String fileToJson = new String(Files.readAllBytes(Paths.get(filePath)));
 
-        List<CustomNumberEntity> customNumberEntityList = null;
-        try {
-            customNumberEntityList = objectMapper.readValue(fileToJson, new TypeReference<>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        List<CustomNumberEntity> customNumberEntityList = objectMapper.readValue(fileToJson, new TypeReference<>() {
+        });
 
         List<CustomNumberEntity> validList = customNumberEntityList.stream().filter(this::onlyValidNumbersToBeCollected).collect(Collectors.toList());
 
@@ -80,9 +74,8 @@ public class NumberFinderImpl implements NumberFinder {
         }
     }
 
-    @SneakyThrows // Add try catch instead !
     @Override
-    public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) {
+    public boolean contains(int valueToFind, List<CustomNumberEntity> customNumberEntityList) throws ExecutionException, InterruptedException {
         log.info("Preparing to check if value of: " + valueToFind + " exists in the list of test data");
 
         List<FastestComparator> simpleListSleepingCallables = new ArrayList<>();
