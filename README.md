@@ -5,6 +5,7 @@
 ### 2. A scanner will prompt you to enter a number so enter any number. Validations are applied to only accept numbers
 ### 3. Just sit back and let the application return the result. The result is stored in the FindNumberResult return object
 ### 4. The result is also viewable in the console. i.e. See below snippet for instance
+### 5. NumberFinderImplTest.java contains some handy tests. Feel free to take a look at them. They should show the integrity of the App
 ![img.png](img.png)
 
 ## Notes on Application Behaviour
