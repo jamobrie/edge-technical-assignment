@@ -2,6 +2,7 @@ package com.edge.numberChecker.numberChecker.assignment;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface NumberFinder {
 
@@ -13,7 +14,7 @@ public interface NumberFinder {
      * @return true if valueToFind exist in the list
      * false if not
      */
-    boolean contains(int valueToFind, List<CustomNumberEntity> list);
+    boolean contains(int valueToFind, List<CustomNumberEntity> list) throws InterruptedException, ExecutionException;
 
     /**
      * Read a list of CustommNumberEntity from a file

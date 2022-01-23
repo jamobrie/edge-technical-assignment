@@ -1,9 +1,18 @@
 package com.edge.numberChecker.numberChecker.assignment;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 //Not to be modified as mentioned in requirements
-public final class FastestComparator {
+public final class FastestComparator implements Callable<Integer> {
+
+    private final int valueToFind;
+    private final CustomNumberEntity customNumberEntity;
+
+    public FastestComparator(int valueToFind, CustomNumberEntity customNumberEntity) {
+        this.valueToFind = valueToFind;
+        this.customNumberEntity = customNumberEntity;
+    }
 
     /**
      * Get an int and CustomNumberEntity values as input and compare them as a int numbers
@@ -18,6 +27,7 @@ public final class FastestComparator {
     public int compare(int firstValue, CustomNumberEntity secondValue) {
         Random random = new Random();
         int mSeconds = (random.nextInt(6) + 5) * 1000; //milliseconds
+        System.out.println(Thread.currentThread().getName() + " is sleeping for: " + mSeconds);
         int secondValueAsNumber = Integer.parseInt(secondValue.getNumber());
         try {
             Thread.sleep(mSeconds);
@@ -26,5 +36,11 @@ public final class FastestComparator {
         }
         return firstValue - secondValueAsNumber;
     }
+
+    @Override
+    public Integer call() {
+        return compare(this.valueToFind, this.customNumberEntity);
+    }
+
 }
 
